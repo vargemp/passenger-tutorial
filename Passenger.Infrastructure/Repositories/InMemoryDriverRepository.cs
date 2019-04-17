@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Passenger.Core.Domain;
 using Passenger.Core.Repositories;
 
@@ -11,23 +12,24 @@ namespace Passenger.Infrastructure.Repositories
     {
         private static ISet<Driver> _drivers = new HashSet<Driver>();
 
-        public void Add(Driver driver)
+        public async Task<Driver> GetAsync(Guid userId)
+            => await Task.FromResult(_drivers.SingleOrDefault(x => x.UserId == userId));
+        
+        public async Task AddAsync(Driver driver)
         {
             _drivers.Add(driver);
-
+            await Task.CompletedTask;
         }
 
-        public Driver Get(Guid userId)
-        {
-            return _drivers.Single(d => d.UserId == userId);
-        }
+        public async Task<IEnumerable<Driver>> GetAllAsync()
+            => await Task.FromResult(_drivers);
 
         public IEnumerable<Driver> GetAll()
             => _drivers;
-
-        public void Update(Driver driver)
+        
+        public async Task UpdateAsync(Driver driver)
         {
-            throw new NotImplementedException();
+            await Task.CompletedTask;
         }
     }
 }
