@@ -7,8 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Passenger.Core.Domain;
 using Xunit;
 
 namespace Passenger.Tests.EndToEnd.Controllers
@@ -27,17 +29,15 @@ namespace Passenger.Tests.EndToEnd.Controllers
         [Fact]
         public async Task Given_valid_email_user_should_exist()
         {
-            //act
+            //arrange
             var email = "user1@gmail.com";
-            var response = await _client.GetAsync($"users/{email}");
-            response.EnsureSuccessStatusCode();
+            
 
-            var responseString = await response.Content.ReadAsStringAsync();
-            var user = JsonConvert.DeserializeObject<UserDTO>(responseString);
-
+            //act
+            var user = GetUserAsync(email);
 
             //assert
-            Assert.Equal(user.Email, email);
+            Assert.Equal(user.Result.Email, email);
         }
 
         [Fact]
@@ -46,6 +46,42 @@ namespace Passenger.Tests.EndToEnd.Controllers
             var email = "user99@gmail.com";
             var response = await _client.GetAsync($"users/{email}");
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task given_uniqe_email_user_should_be_created()
+        {
+            //arrange
+            var request = new
+            {
+                email = "user10@gmail.com",
+                password = "blablabla",
+                username = "tomtom"
+            };
+            var payload = GetPayload(request);
+
+            //act
+            var response = await _client.PostAsync("users/", payload);
+
+            //assert
+            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            Assert.Equal($"users/{request.email}", response.Headers.Location.ToString());
+
+            var user = GetUserAsync(request.email);
+            Assert.Equal(user.Result.Email, request.email);
+        }
+
+        private async Task<UserDTO> GetUserAsync(string email)
+        {
+            var response = await _client.GetAsync($"users/{email}");
+            response.EnsureSuccessStatusCode();
+            var responseString = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<UserDTO>(responseString);
+        }
+        private static StringContent GetPayload(object data)
+        {
+            var json = JsonConvert.SerializeObject(data);
+            return new StringContent(json, Encoding.UTF8, "application/json");
         }
     }
 }
