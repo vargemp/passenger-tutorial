@@ -7,19 +7,6 @@ namespace Passenger.Core.Domain
 {
     public class User
     {
-        protected User()
-        {
-        }
-        public User(string email, string username,
-            string password, string salt)
-        {
-            Id = Guid.NewGuid();
-            Email = email;
-            Password = password;
-            Username = username;
-            Salt = salt;
-            CreatedAt = DateTime.UtcNow;
-        }
 
         private static readonly Regex NameRegex = new Regex("^(?![_.-])(?!.*[_.-]{2})[a-zA-Z0-9._.-]+(?<![_.-])$");
         
@@ -29,9 +16,38 @@ namespace Passenger.Core.Domain
         public string Salt { get; protected set; }
         public string Username { get; protected set; }    
         public string FullName { get; protected set; }
+        public string Role { get; protected set; }
         public DateTime CreatedAt { get; protected set; }
         public DateTime UpdatedAt { get; protected set; }
 
+        protected User()
+        {
+        }
+        public User(string email, string username,
+            string password, string salt)
+        {
+            Id = Guid.NewGuid();
+            Email = email;
+            Username = username;
+            Password = password;
+            Salt = salt;
+            CreatedAt = DateTime.UtcNow;
+        }
+        public User(string email, string username,
+            string password, string role, string salt)
+        {
+            Id = Guid.NewGuid();
+            Email = email;
+            Username = username;
+            Password = password;
+            Role = role;
+            Salt = salt;
+            CreatedAt = DateTime.UtcNow;
+        }
+
+        public void SetUserId(string userId)
+        {
+        }
         public void SetEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
