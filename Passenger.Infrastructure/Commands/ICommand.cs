@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Passenger.Infrastructure.Commands.Users
+namespace Passenger.Infrastructure.Commands
 {
     public interface ICommand
     {

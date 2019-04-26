@@ -21,7 +21,7 @@ namespace Passenger.Tests.EndToEnd.Controllers
         public async Task Given_valid_email_user_should_exist()
         {
             //arrange
-            var email = "user1@gmail.com";
+            var email = "user1@test.com";
             
 
             //act

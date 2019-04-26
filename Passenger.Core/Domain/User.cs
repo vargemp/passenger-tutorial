@@ -23,28 +23,17 @@ namespace Passenger.Core.Domain
         protected User()
         {
         }
-        public User(string email, string username,
-            string password, string salt)
+        public User(Guid userId, string email, string username,
+            string password, string salt, string role)
         {
-            Id = Guid.NewGuid();
+            Id = userId;
             Email = email;
             Username = username;
             Password = password;
             Salt = salt;
-            CreatedAt = DateTime.UtcNow;
-        }
-        public User(string email, string username,
-            string password, string role, string salt)
-        {
-            Id = Guid.NewGuid();
-            Email = email;
-            Username = username;
-            Password = password;
             Role = role;
-            Salt = salt;
             CreatedAt = DateTime.UtcNow;
         }
-
         public void SetUserId(string userId)
         {
         }

@@ -21,10 +21,11 @@ namespace Passenger.Tests.Services
             //Arrange
             var userRepoMock = new Mock<IUserRepository>();
             var mapperMock = new Mock<IMapper>();
-            var userService = new UserService(userRepoMock.Object, mapperMock.Object);
+            var encrypterMock = new Mock<IEncrypter>();
+            var userService = new UserService(userRepoMock.Object, encrypterMock.Object , mapperMock.Object);
 
             //Act
-            await userService.RegisterAsync("tom@mgail.com", "tomtom", "abrakadabra");
+            await userService.RegisterAsync(Guid.NewGuid(),"tom@mgail.com", "tomtom", "abrakadabra", "admin");
 
             //Assert
             userRepoMock.Verify(x => x.AddAsync(It.IsAny<User>()), Times.Once);
@@ -36,11 +37,12 @@ namespace Passenger.Tests.Services
             //Arrange
             var userRepoMock = new Mock<IUserRepository>();
             var mapperMock = new Mock<IMapper>();
-            var userService = new UserService(userRepoMock.Object, mapperMock.Object);
+            var encrypterMock = new Mock<IEncrypter>();
+            var userService = new UserService(userRepoMock.Object, encrypterMock.Object, mapperMock.Object);
 
             //act
             await userService.GetAsync("user1@gmail.com");
-            var user = new User("user1@gmail.com", "user1", "secret", "salt");
+            var user = new User(Guid.NewGuid(), "user1@gmail.com", "user1", "secret", "salt", "user");
 
             //assert
             userRepoMock.Setup(x => x.GetAsync(It.IsAny<string>())).ReturnsAsync(user);
@@ -54,11 +56,12 @@ namespace Passenger.Tests.Services
             //Arrange
             var userRepoMock = new Mock<IUserRepository>();
             var mapperMock = new Mock<IMapper>();
-            var userService = new UserService(userRepoMock.Object, mapperMock.Object);
+            var encrypterMock = new Mock<IEncrypter>();
+            var userService = new UserService(userRepoMock.Object, encrypterMock.Object ,mapperMock.Object);
 
             //Act
             //await userService.RegisterAsync("user1@gmail.com", "tomtom", "abrakadabra");
-            var ex = await Record.ExceptionAsync(() => userService.RegisterAsync("user1@gmail.com", "tomtom", "abrakadabra"));
+            var ex = await Record.ExceptionAsync(() => userService.RegisterAsync(Guid.NewGuid(), "user1@gmail.com", "tomtom", "abrakadabra", "admin"));
 
             //Assert
             Assert.IsType<Exception>(ex);

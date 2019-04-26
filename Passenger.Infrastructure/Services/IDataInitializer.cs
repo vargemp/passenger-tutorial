@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Passenger.Infrastructure.DTO;
+using System.Threading.Tasks;
 
 namespace Passenger.Infrastructure.Services
 {
-    public interface IJwtHandler
+    public interface IDataInitializer : IService
     {
-        JwtDto CreateToken(Guid userId, string role);
-
+        Task SeedAsync();
     }
 }

@@ -23,9 +23,9 @@ namespace Passenger.Core.Domain
         }
         public void SetAdress(string address)
         {
-            if (!NameRegex.IsMatch(address))
+            if (string.IsNullOrWhiteSpace(address))
             {
-                throw new Exception("Adress is invalid.");
+                throw new Exception("Adress is empty.");
             }
 
             Address = address;

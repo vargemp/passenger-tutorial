@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Passenger.Infrastructure.Commands.Users;
-
+﻿
 namespace Passenger.Infrastructure.Commands.Users
 {
     public class ChangeUserPassword : ICommand

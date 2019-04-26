@@ -5,7 +5,7 @@ using Passenger.Infrastructure.Commands.Users;
 
 namespace Passenger.Infrastructure.Commands.Drivers
 {
-    public class CreateDriver : ICommand
+    public class CreateDriver : AuthenticatedCommandBase 
     {
         public Guid UserId { get; set; }
         public DriverVehicle Vehicle { get; set; }
