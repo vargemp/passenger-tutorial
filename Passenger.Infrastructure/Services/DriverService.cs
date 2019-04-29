@@ -6,6 +6,7 @@ using AutoMapper;
 using Passenger.Core.Domain;
 using Passenger.Core.Repositories;
 using Passenger.Infrastructure.DTO;
+using Passenger.Infrastructure.Extensions;
 
 
 namespace Passenger.Infrastructure.Services
@@ -30,24 +31,19 @@ namespace Passenger.Infrastructure.Services
         {
             var driver = await _driverRepository.GetAsync(userId);
 
-            return _mapper.Map<Driver, DriverDetailsDTO>(driver);
+            return _mapper.Map<DriverDetailsDTO>(driver);
         }
 
         public async Task<IEnumerable<DriverDTO>> BrowseAsync()
         {
             var drivers = await _driverRepository.GetAllAsync();
 
-            return _mapper.Map<IEnumerable<Driver>, IEnumerable<DriverDTO>>(drivers);
+            return _mapper.Map<IEnumerable<DriverDTO>>(drivers);
         }
 
         public async Task CreateAsync(Guid userId)
         {
-            var user = await _userRepository.GetAsync(userId);
-            if (user == null)
-            {
-                throw new Exception($"User with id {userId} was not found.");
-            }
-
+            var user = await _userRepository.GetOrFailAsync(userId);
             var driver = await _driverRepository.GetAsync(userId);
             if (driver != null)
             {
@@ -60,7 +56,7 @@ namespace Passenger.Infrastructure.Services
 
         public async Task SetVehicleAsync(Guid userId, string brand, string name)
         {
-            var driver = await _driverRepository.GetAsync(userId);
+            var driver = await _driverRepository.GetOrFailAsync(userId);
             if (driver == null)
             {
                 throw new Exception($"Driver with id {userId} wasnt found.");
@@ -70,6 +66,12 @@ namespace Passenger.Infrastructure.Services
             var vehicle = Vehicle.Create(brand, name, vehicleDetails.Seats);
             driver.SetVehicle(vehicle);
             await _driverRepository.UpdateAsync(driver);
+        }
+
+        public async Task DeleteAsync(Guid userId)
+        {
+            var driver = await _driverRepository.GetOrFailAsync(userId);
+            await _driverRepository.DeleteAsync(driver);
         }
     }
 }

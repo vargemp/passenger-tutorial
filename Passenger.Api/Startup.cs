@@ -19,6 +19,7 @@ using Passenger.Infrastructure.Mapper;
 using Passenger.Infrastructure.Services;
 using Passenger.Infrastructure.Repositories;
 using Passenger.Infrastructure.Settings;
+using Passenger.Api.Framework;
 
 namespace Passenger.Api
 {
@@ -76,6 +77,8 @@ namespace Passenger.Api
                 var dataInitializer = app.ApplicationServices.GetService<IDataInitializer>();
                 dataInitializer.SeedAsync();
             }
+
+            app.UseMyExceptionHandler(); 
             app.UseMvc();
             appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
         }

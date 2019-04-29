@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Passenger.Core.Domain;
 using Passenger.Infrastructure.Commands.Drivers.Models;
-using Passenger.Infrastructure.Commands.Users;
 
 namespace Passenger.Infrastructure.Commands.Drivers
 {
-    public class CreateDriver : AuthenticatedCommandBase 
+    public class UpdateDriver : AuthenticatedCommandBase
     {
-        public DriverVehicle Vehicle { get; set; }
+        public DriverVehicle Vehicle { get; set; } 
+
     }
 }

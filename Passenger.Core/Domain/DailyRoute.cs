@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Passenger.Core.Domain
 {
-    public class DailyRoute
+    public class  DailyRoute
     {
         private ISet<PassengerNode> _passengerNodes = new HashSet<PassengerNode>();
         public Guid Id { get; protected set; }
