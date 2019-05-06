@@ -6,7 +6,9 @@ using AutoMapper;
 using Passenger.Core.Domain;
 using Passenger.Core.Repositories;
 using Passenger.Infrastructure.DTO;
+using Passenger.Infrastructure.Exceptions;
 using Passenger.Infrastructure.Extensions;
+using ErrorCodes = Passenger.Core.Domain.ErrorCodes;
 
 
 namespace Passenger.Infrastructure.Services
@@ -47,7 +49,7 @@ namespace Passenger.Infrastructure.Services
             var driver = await _driverRepository.GetAsync(userId);
             if (driver != null)
             {
-                throw new Exception($"Driver with id {userId} already exists.");
+                throw new ServiceException(Passenger.Infrastructure.Exceptions.ErrorCodes.DriverAlreadyExists,$"Driver with id {userId} already exists.");
             }
 
             driver = new Driver(user);
@@ -57,11 +59,6 @@ namespace Passenger.Infrastructure.Services
         public async Task SetVehicleAsync(Guid userId, string brand, string name)
         {
             var driver = await _driverRepository.GetOrFailAsync(userId);
-            if (driver == null)
-            {
-                throw new Exception($"Driver with id {userId} wasnt found.");
-            }
-
             var vehicleDetails = await _vehicleProvider.GetAsync(brand, name);
             var vehicle = Vehicle.Create(brand, name, vehicleDetails.Seats);
             driver.SetVehicle(vehicle);

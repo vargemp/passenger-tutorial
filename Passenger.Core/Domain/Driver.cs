@@ -9,10 +9,10 @@ namespace Passenger.Core.Domain
     {
         private ISet<Route> _routes = new HashSet<Route>();
         private ISet<DailyRoute> _dailyRoutes = new HashSet<DailyRoute>();
+
         public Guid UserId { get; protected set; }
         public string Name { get; set; }  
         public Vehicle Vehicle { get; protected set; }
-
         public IEnumerable<Route> Routes
         {
             get { return _routes; }
@@ -44,12 +44,11 @@ namespace Passenger.Core.Domain
 
         public void AddRoute(string name, Node start, Node end, double length)
         {
-            var route = Routes.SingleOrDefault(x => x.Name == name);
+            var route = Routes.SingleOrDefault(r => r.Name == name);
             if (route != null)
             {
                 throw new Exception($"Route with name: '{name}' already exists for driver: {Name}.");
             }
-            _routes.Add(route);
             _routes.Add(Route.Create(name, start, end, length));
             UpdatedAt = DateTime.UtcNow;
         }
